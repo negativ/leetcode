@@ -20,31 +20,27 @@ public:
         if (!root)
             return 0;
         
-        deque<int> path;
-        dfs(root, path);
+        int current = root->val;
+        int sum = 0;
         
-        return ret;
+        dfs(root, current, sum);
+        
+        return sum;
     }
     
 private:
-    void dfs(TreeNode* root, deque<int>& path) {
+    void dfs(TreeNode* root, int current, int &sum) {
         if (root->left == nullptr && root->right == nullptr) {
-            ret += accumulate(rbegin(path), rend(path),
-                              root->val,
-                              [xpow{1}](auto acc, auto d) mutable { return acc + d * pow(10, xpow++); });
+            sum += current;
             
             return;
         }
         
-        path.emplace_back(root->val);
+        current *= 10;
         
         if (root->left)
-            dfs(root->left, path);
+            dfs(root->left, current + root->left->val, sum);
         if (root->right)
-            dfs(root->right, path);
-        
-        path.pop_back();
+            dfs(root->right, current + root->right->val, sum);
     }
-    
-    int ret;
 };
